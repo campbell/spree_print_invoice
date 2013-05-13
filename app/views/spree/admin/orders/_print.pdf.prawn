@@ -1,9 +1,13 @@
 require 'prawn/layout'
+require 'prawn/js'
+
+add_docopen_js('autoprint', 'this.print()') if @autoprint
 
 font "Helvetica"
 im = "#{Rails.root.to_s}/public/assets/#{Spree::PrintInvoice::Config[:print_invoice_logo_path]}"
+im_scale = Spree::PrintInvoice::Config[:print_invoice_logo_scale]
 
-image im , :at => [0,720] #, :scale => 0.35
+image im , :at => [0,720], :scale => im_scale
 
 fill_color "E99323"
 if @hide_prices
@@ -32,4 +36,4 @@ render :partial => "line_items_box"
 move_down 8
 
 # Footer
-# render :partial => "footer"
+render(:partial => "footer") if Spree::PrintInvoice::Config[:include_invoice_footer]
